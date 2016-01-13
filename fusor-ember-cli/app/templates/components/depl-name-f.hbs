@@ -1,0 +1,10 @@
+{{#text-f label=label value=value inputSize=inputSize errors=errors cssId=cssId isRequired=isRequired disabled=disabled isUnique=isUnique uniqueValues=uniqueValues}}
+  {{#if value}}
+    {{#if invalidDeploymentName}}
+      <span class="error errorForValidation">
+        Deployment name cannot contain spaces.
+      </span>
+    {{/if}}
+  {{/if}}
+  {{yield}}
+{{/text-f}}

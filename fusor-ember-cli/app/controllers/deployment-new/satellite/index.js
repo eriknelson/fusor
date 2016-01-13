@@ -11,7 +11,15 @@ export default Ember.Controller.extend(NeedsDeploymentNewMixin, {
 
   organizationTabRouteName: Ember.computed.alias("deploymentNewSatelliteController.organizationTabRouteName"),
 
-  disableNextOnDeploymentName: Ember.computed.alias("deploymentNewController.disableNextOnDeploymentName"),
+  disableNextOnDeploymentName: Ember.computed(
+    'deploymentNewController.disableNextOnDeploymentName',
+    'isInvalidDeploymentName',
+    function()
+  {
+    return this.get('deploymentNewController.disableNextOnDeploymentName') ||
+      this.get('isInvalidDeploymentName');
+  }),
+
 
   idSatName: 'deployment_new_sat_name',
   idSatDesc: 'deployment_new_sat_desc',
