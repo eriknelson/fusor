@@ -49,12 +49,6 @@ export default Ember.Component.extend({
   }),
   valueIsNotPrompt: Ember.computed.not('valueIsPrompt'),
 
-  isValid: Ember.computed(
-    'optValueIsOptLabel', 'valueIsNotPrompt', 'value', function() {
-      return this.get('optValueIsOptLabel') ?
-        this.get('valueIsNotPrompt') :
-        this.get('value') != null;
-  }),
   isInvalid: Ember.computed.not('isValid'),
 
   validationMessages: Ember.computed('value', function() {
