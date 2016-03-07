@@ -52,6 +52,21 @@ export default Ember.Controller.extend(ProgressBarMixin, NeedsDeploymentMixin, {
     }
 
     return true;
-  })
+  }),
 
+  isAbandonModalOpen: false,
+
+  actions: {
+    redeploy() {
+      console.log('actions::redeploy');
+    },
+    abandon() {
+      this.set('isAbandonModalOpen', true);
+    },
+    executeAbandonment() {
+      let depl = this.get('deploymentController.model');
+      depl.destroyRecord();
+      this.transitionToRoute('deployments');
+    }
+  }
 });

@@ -1,19 +1,29 @@
 <br />
 
-{{progress-bar model=manageContentTask name=nameSatellite isSatelliteProgressBar=true}}
+{{#if deployment.has_content_error}}
+  <h1>Content Error Occurred</h1>
+  <button {{action 'abandon'}}>Abandon Deployment</button>
+  <button class="disabled" {{action 'redeploy'}} disabled>Redeploy (Not Implemented)</button>
+{{else}}
 
-{{#if isRhev}}
-  {{progress-bar model=rhevTask name=nameRhev isSatelliteProgressBar=false}}
+  {{progress-bar model=manageContentTask name=nameSatellite isSatelliteProgressBar=true}}
+
+  {{#if isRhev}}
+    {{progress-bar model=rhevTask name=nameRhev isSatelliteProgressBar=false}}
+  {{/if}}
+
+  {{#if isOpenStack}}
+    {{progress-bar model=openstackTask name=nameOpenStack isSatelliteProgressBar=false}}
+  {{/if}}
+
+  {{#if isCloudForms}}
+    {{progress-bar model=cfmeTask name=nameCloudForms isSatelliteProgressBar=false}}
+  {{/if}}
+
+  {{#if showDeployTaskProgressBar}}
+    {{progress-bar model=deployTask name='Total Deployment' isSatelliteProgressBar=false}}
+  {{/if}}
+
 {{/if}}
 
-{{#if isOpenStack}}
-  {{progress-bar model=openstackTask name=nameOpenStack isSatelliteProgressBar=false}}
-{{/if}}
-
-{{#if isCloudForms}}
-  {{progress-bar model=cfmeTask name=nameCloudForms isSatelliteProgressBar=false}}
-{{/if}}
-
-{{#if showDeployTaskProgressBar}}
-  {{progress-bar model=deployTask name='Total Deployment' isSatelliteProgressBar=false}}
-{{/if}}
+{{partial 'abandon-deployment-modal'}}
