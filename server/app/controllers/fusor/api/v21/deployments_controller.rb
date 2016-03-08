@@ -64,6 +64,33 @@ module Fusor
       end
     end
 
+    def redeploy
+      begin
+        if @deployment.invalid?
+          raise ::ActiveRecord::RecordInvalid.new @deloyment
+        end
+
+        # TODO?: Update log?
+        # TODO?: Some logic to setup provider?
+        #   -> Probably not required because the task isn't set
+        #   by this point in vanilla deploy. Provider should be set and remain
+        #   valid, requiring no work
+
+        # TODO: Kick off new task and attach it to the exisitng deployment
+        #
+        # TODO?: Does ManageManifest need to be performed again? Manifest
+        # should have already been setup and verified, don't think you can
+        # reach here if that work hasn't already been done.
+
+        new_deploy_task = async_task(::Actions::Fusor::Deploy, @deployment)
+
+        respond_for_async :resource => new_deploy_task
+
+      rescue ::ActiveRecord::RecordInvalid
+        render json: {errors: @deployment.errors}, status: 422
+      end
+    end
+
     def validate
       @deployment.valid?
       render json: {
