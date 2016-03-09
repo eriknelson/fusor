@@ -1,9 +1,14 @@
 <br />
 
 {{#if deployment.has_content_error}}
-  <h1>Content Error Occurred</h1>
-  <button {{action 'abandon'}}>Abandon Deployment</button>
-  <button {{action 'redeploy'}}>Redeploy</button>
+  {{#if loadingRedeployment}}
+    <h1 style="float: left; margin: 0 15px 0 0">Content Error Occurred</h1>
+    <div style="float: left; margin-top: 2px" class="spinner spinner-md spinner-inline"></div>
+  {{else}}
+    <h1>Content Error Occurred</h1>
+    <button {{action 'abandon'}}>Abandon Deployment</button>
+    <button {{action 'redeploy'}}>Redeploy</button>
+  {{/if}}
 {{else}}
 
   {{progress-bar model=manageContentTask name=nameSatellite isSatelliteProgressBar=true}}

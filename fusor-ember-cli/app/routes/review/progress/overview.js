@@ -63,7 +63,7 @@ export default Ember.Route.extend({
       .then((resumeResult) => this.refresh())
       .catch((reason) => {
         console.log(
-          'ERRROR: Something broke trying to recover the ManageContentTask');
+          'ERROR: Something broke trying to recover the ManageContentTask');
       });
 
     } else if(!model.deployment.get('has_content_error')) {

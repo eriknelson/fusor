@@ -56,21 +56,15 @@ export default Ember.Controller.extend(ProgressBarMixin, NeedsDeploymentMixin, {
   }),
 
   isAbandonModalOpen: false,
+  loadingRedeployment: false,
 
   actions: {
     redeploy() {
-      // TODO: Throw up spinner!
-      console.log('actions::redeploy');
+      this.set('loadingRedeployment', true);
 
-      //////////////////////////////////////////////////////////////
-      // NOTE: Not clear how this is satisfied? Seems to be undefined all over
-      //  -> additional header
-      //"Authorization": "Basic " + this.get('session.basicAuthToken')
-      //////////////////////////////////////////////////////////////
       let depl = this.get('deploymentController.model');
       let token = Ember.$('meta[name="csrf-token"]').attr('content');
 
-      console.log('requesting redeployment...');
       request({
         url: '/fusor/api/v21/deployments/' + depl.get('id') + '/redeploy',
         type: "PUT",
@@ -82,21 +76,13 @@ export default Ember.Controller.extend(ProgressBarMixin, NeedsDeploymentMixin, {
         }
       }).then((response) => {
         let newTaskUUID = response.id;
-        console.log('/redeploy then branch');
-        console.log('got redeploy task uuid: ', newTaskUUID);
-
-        // Relink deployment object with new deployment task and transition
-        // back to review.progress.overview as if this was just a regular
-        // deployment initiated from the review page.
-        // TODO: Anything else required here aside from just updating the FK?
         depl.set('foreman_task_uuid', newTaskUUID);
         depl.set('has_content_error', false);
         depl.save();
-
-        this.transitionToRoute('review.progress.overview');
+        this.send('refreshModelOnOverviewRoute');
       }).catch((err) => {
         console.log('ERROR occurred attempting a redeploy', err);
-      });
+      }).finally(() => this.set('loadingRedeployment', false));
     },
     abandon() {
       this.set('isAbandonModalOpen', true);
