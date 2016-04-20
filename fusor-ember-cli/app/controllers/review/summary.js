@@ -46,6 +46,13 @@ export default Ember.Controller.extend(NeedsDeploymentMixin, {
     return `https://${masterHost.get('ip')}:8443`;
   }),
 
+  exampleAppUrl: Ember.computed('deploymentController.defaultDomainName', function() {
+    const domainName = this.get('deploymentController.defaultDomainName');
+    const subdomainName = this.get('model.openshift_subdomain_name');
+
+    return `https://hello-openshift.${subdomainName}.${domainName}`;
+  }),
+
   oseMasterHosts: Ember.computed.alias('deploymentController.model.openshift_master_hosts'),
 
   oseMasterHost: Ember.computed('oseMasterHosts', function() {
