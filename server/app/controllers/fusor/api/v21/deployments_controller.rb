@@ -140,7 +140,7 @@ module Fusor
       rescue => error
         message = 'Malformed request'
         message = error.message if error.respond_to?(:message)
-        render json: { :error => message }, status: 400
+        render json: { :mounted => false }, status: 200
       end
     end
 
